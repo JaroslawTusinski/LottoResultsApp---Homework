@@ -7,17 +7,16 @@ namespace ConsoleApplicationWithOptions
     {
         public static void Main(string[] args)
         {
-            OptionsController optionsController = new OptionsController(
+            MenuController menuController = new MenuController(
                 new List<string>
                 {
-                    "Option",
-                    "Option 2",
-                    "Option three",
-                    "Option 4",
-                    "Last",
+                    "Zliczyć wystąpienie każdej z liczb?",
+                    "Która liczba została wylosowana najwięcej razy?",
+                    "Sześć liczb które zostały wylosowane najmniej razy?",
+                    "Czy kiedykolwiek nastąpiło powtórzenie?",
                 }
             );
-            optionsController.Run();
+            menuController.Run();
         }
     }
 }

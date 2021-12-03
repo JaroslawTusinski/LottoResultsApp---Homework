@@ -4,13 +4,13 @@ using ConsoleApplicationWithOptions.Views;
 
 namespace ConsoleApplicationWithOptions.Controllers
 {
-    public class OptionsController
+    public class MenuController
     {
-        private OptionsView optionsView;
+        private readonly MenuView _menuView;
 
-        public OptionsController(List<string> optionsList)
+        public MenuController(List<string> optionsList)
         {
-            optionsView = new OptionsView(optionsList);
+            _menuView = new MenuView(optionsList);
         }
 
         public void Run()
@@ -20,7 +20,7 @@ namespace ConsoleApplicationWithOptions.Controllers
             do
             {
                 Console.Clear();
-                optionsView.Display(key);
+                _menuView.Display(key);
                 key = Console.ReadKey().Key;
             } while (key != ConsoleKey.Escape);
         }
