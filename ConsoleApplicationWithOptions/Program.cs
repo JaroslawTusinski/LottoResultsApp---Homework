@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ConsoleApplicationWithOptions.Controllers;
 
 namespace ConsoleApplicationWithOptions
@@ -8,12 +9,12 @@ namespace ConsoleApplicationWithOptions
         public static void Main(string[] args)
         {
             MenuController menuController = new MenuController(
-                new List<string>
+                new List<Tuple<string, Action>>
                 {
-                    "Zliczyć wystąpienie każdej z liczb?",
-                    "Która liczba została wylosowana najwięcej razy?",
-                    "Sześć liczb które zostały wylosowane najmniej razy?",
-                    "Czy kiedykolwiek nastąpiło powtórzenie?",
+                    new Tuple<string, Action>("Zliczyć wystąpienie każdej z liczb?", null),
+                    new Tuple<string, Action>("Która liczba została wylosowana najwięcej razy?", null),
+                    new Tuple<string, Action>("Sześć liczb które zostały wylosowane najmniej razy?", null),
+                    new Tuple<string, Action>("Czy kiedykolwiek nastąpiło powtórzenie?", null),
                 }
             );
             menuController.Run();

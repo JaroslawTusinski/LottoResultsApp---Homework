@@ -38,6 +38,7 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Controllers\Controller.cs" />
         <Compile Include="Controllers\LottoController.cs" />
         <Compile Include="Controllers\MenuController.cs" />
         <Compile Include="Helpers\ConsoleHelper.cs" />
@@ -45,6 +46,7 @@
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Views\LottoView.cs" />
         <Compile Include="Views\MenuView.cs" />
+        <Compile Include="Views\View.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include=".gitignore" />

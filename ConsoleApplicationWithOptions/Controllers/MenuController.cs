@@ -1,28 +1,46 @@
 using System;
 using System.Collections.Generic;
+using ConsoleApplicationWithOptions.Helpers;
 using ConsoleApplicationWithOptions.Views;
 
 namespace ConsoleApplicationWithOptions.Controllers
 {
-    public class MenuController
+    public class MenuController : Controller
     {
-        private readonly MenuView _menuView;
-
-        public MenuController(List<string> optionsList)
+        public MenuController(List<Tuple<string, Action>> textAndAction) : base(textAndAction)
         {
-            _menuView = new MenuView(optionsList);
+            View = new MenuView(new List<string>(TextAndAction.ConvertAll(p => p.Item1)));
         }
 
-        public void Run()
+        public override void Run()
         {
-            Console.CursorVisible = false;
             ConsoleKey key = ConsoleKey.DownArrow;
             do
             {
-                Console.Clear();
-                _menuView.Display(key);
+                RunKeyAction(key);
+                View.Display(MarkIndex);
                 key = Console.ReadKey().Key;
             } while (key != ConsoleKey.Escape);
+        }
+
+        private void RunKeyAction(ConsoleKey key)
+        {
+            switch (key)
+            {
+                case ConsoleKey.UpArrow:
+                    MarkIndex = MarkIndex > 0 ? --MarkIndex : TextAndAction.Count - 1;
+                    break;
+                case ConsoleKey.DownArrow:
+                    MarkIndex = MarkIndex < TextAndAction.Count - 1 ? ++MarkIndex : 0;
+                    break;
+                case ConsoleKey.Enter:
+                    if (TextAndAction[MarkIndex] != null)
+                        TextAndAction[MarkIndex].Item2();
+                    break; 
+                default:
+                    ConsoleHelper.WrongKeyMessage("Bad key");
+                    break;
+            }
         }
     }
 }
