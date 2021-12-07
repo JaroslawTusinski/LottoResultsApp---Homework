@@ -7,20 +7,24 @@ namespace ConsoleApplicationWithOptions.Controllers
 {
     public class MenuController : Controller
     {
-        public MenuController(List<Tuple<string, Action>> textAndAction) : base(textAndAction)
+        public MenuController(List<Tuple<string, Action>> textAndAction = null) : base(textAndAction)
         {
-            View = new MenuView(new List<string>(TextAndAction.ConvertAll(p => p.Item1)));
+            if (textAndAction != null)
+                View = new MenuView(new List<string>(TextAndAction.ConvertAll(p => p.Item1)));
         }
 
         public override void Run()
         {
-            ConsoleKey key = ConsoleKey.DownArrow;
-            do
+            if (TextAndAction != null)
             {
-                RunKeyAction(key);
-                View.Display(MarkIndex);
-                key = Console.ReadKey().Key;
-            } while (key != ConsoleKey.Escape);
+                ConsoleKey key = ConsoleKey.DownArrow;
+                do
+                {
+                    RunKeyAction(key);
+                    View.Display(MarkIndex);
+                    key = Console.ReadKey().Key;
+                } while (key != ConsoleKey.Escape);
+            }
         }
 
         private void RunKeyAction(ConsoleKey key)

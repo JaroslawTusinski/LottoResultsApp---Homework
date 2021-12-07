@@ -1,13 +1,9 @@
+using System.Collections.Generic;
+
 namespace ConsoleApplicationWithOptions.Views
 {
-    public class LottoView
+    public class LottoView : View
     {
-        public LottoView()
-        {
-        }
-
-        public void Display()
-        {
-        }
+        public LottoView(List<string> toDisplay) : base(toDisplay){}
     }
 }

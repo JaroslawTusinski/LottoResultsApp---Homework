@@ -10,14 +10,16 @@ namespace ConsoleApplicationWithOptions.Controllers
         protected View View;
         protected int MarkIndex = -1;
 
-        protected Controller(List<Tuple<string, Action>> textAndAction)
+        protected Controller(List<Tuple<string, Action>> textAndAction = null)
         {
-            TextAndAction = textAndAction;
+            if (textAndAction != null)
+                TextAndAction = textAndAction;
         }
 
         public virtual void Run()
         {
-            View.Display(MarkIndex);
+            if (View != null)
+                View.Display(MarkIndex);
         }
     }
 }

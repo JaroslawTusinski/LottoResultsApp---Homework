@@ -25,6 +25,7 @@ namespace ConsoleApplicationWithOptions.Views
             _largestOptionLength = ToDisplay.Max(s => s.Length);
             LeftCursorPosition += (Console.WindowWidth - _largestOptionLength) / 2;
             _topCursorPosition += (Console.WindowHeight - ToDisplay.Count) / 2;
+            _topCursorPosition = _topCursorPosition < 0 ? 0 : _topCursorPosition;
         }
 
         public void Display(int markIndex = -1)
