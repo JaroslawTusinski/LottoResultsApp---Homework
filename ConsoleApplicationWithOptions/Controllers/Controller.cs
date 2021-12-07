@@ -6,20 +6,20 @@ namespace ConsoleApplicationWithOptions.Controllers
 {
     public abstract class Controller
     {
-        protected readonly List<Tuple<string, Action>> TextAndAction;
-        protected View View;
+        protected readonly Dictionary<string, Action> ActionsDictionary;
+        protected View View = null;
         protected int MarkIndex = -1;
 
-        protected Controller(List<Tuple<string, Action>> textAndAction = null)
+        protected Controller(Dictionary<string, Action> actionsDictionary = null)
         {
-            if (textAndAction != null)
-                TextAndAction = textAndAction;
+            ActionsDictionary = actionsDictionary;
         }
 
         public virtual void Run()
         {
-            if (View != null)
-                View.Display(MarkIndex);
+            if (View == null)
+                return;
+            View.Display(MarkIndex);
         }
     }
 }

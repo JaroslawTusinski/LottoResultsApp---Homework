@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ConsoleApplicationWithOptions.Helpers;
 using ConsoleApplicationWithOptions.Views;
 
@@ -7,24 +8,24 @@ namespace ConsoleApplicationWithOptions.Controllers
 {
     public class MenuController : Controller
     {
-        public MenuController(List<Tuple<string, Action>> textAndAction = null) : base(textAndAction)
+        public MenuController(Dictionary<string, Action> actionsDictionary = null) : base(actionsDictionary)
         {
-            if (textAndAction != null)
-                View = new MenuView(new List<string>(TextAndAction.ConvertAll(p => p.Item1)));
+            if (actionsDictionary != null)
+                View = new MenuView(ActionsDictionary.Keys.ToList());
         }
 
         public override void Run()
         {
-            if (TextAndAction != null)
+            if (View == null)
+                return;
+            
+            ConsoleKey key = ConsoleKey.DownArrow;
+            do
             {
-                ConsoleKey key = ConsoleKey.DownArrow;
-                do
-                {
-                    RunKeyAction(key);
-                    View.Display(MarkIndex);
-                    key = Console.ReadKey().Key;
-                } while (key != ConsoleKey.Escape);
-            }
+                RunKeyAction(key);
+                View.Display(MarkIndex);
+                key = Console.ReadKey().Key;
+            } while (key != ConsoleKey.Escape);
         }
 
         private void RunKeyAction(ConsoleKey key)
@@ -32,15 +33,15 @@ namespace ConsoleApplicationWithOptions.Controllers
             switch (key)
             {
                 case ConsoleKey.UpArrow:
-                    MarkIndex = MarkIndex > 0 ? --MarkIndex : TextAndAction.Count - 1;
+                    MarkIndex = MarkIndex > 0 ? --MarkIndex : ActionsDictionary.Count - 1;
                     break;
                 case ConsoleKey.DownArrow:
-                    MarkIndex = MarkIndex < TextAndAction.Count - 1 ? ++MarkIndex : 0;
+                    MarkIndex = MarkIndex < ActionsDictionary.Count - 1 ? ++MarkIndex : 0;
                     break;
                 case ConsoleKey.Enter:
-                    if (TextAndAction[MarkIndex] != null)
-                        TextAndAction[MarkIndex].Item2();
-                    break; 
+                    if (ActionsDictionary.Values.ElementAt(MarkIndex) != null)
+                        ActionsDictionary.Values.ElementAt(MarkIndex)();
+                    break;
                 default:
                     ConsoleHelper.WrongKeyMessage("Bad key");
                     break;

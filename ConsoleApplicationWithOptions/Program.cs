@@ -10,12 +10,12 @@ namespace ConsoleApplicationWithOptions
         {
             LottoController lottoController = new LottoController();
             MenuController menuController = new MenuController(
-                new List<Tuple<string, Action>>
+                new Dictionary<string, Action>
                 {
-                    new Tuple<string, Action>("Zliczyć wystąpienie każdej z liczb?", () => lottoController.CountNumbers().Run()),
-                    new Tuple<string, Action>("Która liczba została wylosowana najwięcej razy?", () => lottoController.MostFrequently().Run()),
-                    new Tuple<string, Action>("Sześć liczb które zostały wylosowane najmniej razy?", () => lottoController.SixLeastFrequently().Run()),
-                    new Tuple<string, Action>("Czy kiedykolwiek nastąpiło powtórzenie?", () => lottoController.Repeated().Run()),
+                    {"Zliczyć wystąpienie każdej z liczb?", () => lottoController.CountNumbers(7).Run()},
+                    {"Która liczba została wylosowana najwięcej razy?", () => lottoController.GetNumbersSortedByFrequently(desc: true).Run()},
+                    {"Sześć liczb które zostały wylosowane najmniej razy?", () => lottoController.GetNumbersSortedByFrequently(6).Run()},
+                    {"Czy kiedykolwiek nastąpiło powtórzenie?", () => lottoController.RepeatedInfo().Run()},
                 }
             );
             menuController.Run();

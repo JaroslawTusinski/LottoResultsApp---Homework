@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using ConsoleApplicationWithOptions.Helpers;
 using ConsoleApplicationWithOptions.Views;
 
@@ -14,10 +15,10 @@ namespace ConsoleApplicationWithOptions.Controllers
         private readonly int[] _numbersCopy = new int[MaxLottoNumber];
         private bool _repeats;
 
-        public LottoController(List<Tuple<string, Action>> textAndAction = null) : base(textAndAction)
+        public LottoController(Dictionary<string, Action> actionsDictionary = null) : base(actionsDictionary)
         {
-            if (textAndAction != null)
-                View = new LottoView(new List<string>(TextAndAction.ConvertAll(p => p.Item1)));
+            if (actionsDictionary != null)
+                View = new LottoView(ActionsDictionary.Keys.ToList());
             PrepareData();
         }
 
@@ -79,42 +80,51 @@ namespace ConsoleApplicationWithOptions.Controllers
             }
         }
 
-        public LottoController CountNumbers()
+        public LottoController CountNumbers(int columns = 2)
         {
             List<string> toDisplay = new List<string>();
-            int halfOfSize = (MaxLottoNumber - 1) / 2;
-            for (int i = 0; i < halfOfSize; i++)
-                toDisplay.Add($"{i + 1}: {_numbersCount[i]}  |  {i + halfOfSize + 1}: {_numbersCount[i + halfOfSize]}");
-            toDisplay.Add($"{MaxLottoNumber}: {_numbersCount[MaxLottoNumber - 1]}");
+            for (int i = 0; i < MaxLottoNumber; i++)
+            {
+                var line = new StringBuilder(CreateLine(i));
+                for (int j = 1; j < columns && i < MaxLottoNumber - 1; j++)
+                {
+                    ++i;
+                    line.Append($" │ {CreateLine(i)}");
+                }
+                toDisplay.Add(line.ToString());
+            }
 
             View = new LottoView(toDisplay);
             return this;
         }
 
-        public LottoController MostFrequently()
+        private string CreateLine(int i)
         {
-            Array.Sort(_numbersCopy);
-            Array.Reverse(_numbersCopy);
-            int mostFrequently = _numbersCopy[0];
-            View = new LottoView(new List<string>
-            {
-                $"{Array.IndexOf(_numbersCount, mostFrequently) + 1}: {mostFrequently}"
-            });
-            return this;
+            StringBuilder line = new StringBuilder();
+            if (i + 1 <= 9)
+                line = new StringBuilder(" ");
+            return line.Append($"{(i + 1)}: {_numbersCount[i]}").ToString();
         }
 
-        public LottoController SixLeastFrequently()
+        public LottoController GetNumbersSortedByFrequently(int quantity = 1, bool desc = false)
         {
             Array.Sort(_numbersCopy);
+            if (desc)
+                Array.Reverse(_numbersCopy);
+            if (quantity < 1)
+                quantity = 1;
+            else if (quantity > _numbersCopy.Length)
+                quantity = _numbersCopy.Length;
+            
             List<string> toDisplay = new List<string>();
-            for (int i = 0; i < 6 && i < _numbersCopy.Length; i++)
+            for (int i = 0; i < quantity; i++)
                 toDisplay.Add($"{Array.IndexOf(_numbersCount, _numbersCopy[i]) + 1}: {_numbersCopy[i]}");
 
             View = new LottoView(toDisplay);
             return this;
         }
 
-        public LottoController Repeated()
+        public LottoController RepeatedInfo()
         {
             View = new LottoView(new List<string>
             {
